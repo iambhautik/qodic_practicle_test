@@ -5,8 +5,7 @@ export interface EnvSetting {
 // const { VITE_API_BASE_URL } = import.meta;
 
 const envSettings: EnvSetting = {
-    apiURL: import.meta.env.VITE_APP_API_URL
+    apiURL: import.meta.env.VITE_APP_API_URL,
 };
 
 export { envSettings };
-
