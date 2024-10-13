@@ -2,23 +2,26 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Card from "./components/Card";
+import { Container } from "./components/ContentWrapper";
 import { Header } from "./components/Header";
 import { ImageGallary } from "./components/ImageGallary";
 import Modal from "./components/Modal";
 import { Pagination } from "./components/Pagination";
+import { SearchBar } from "./components/SearchBar";
 import { Sidebar } from "./components/Sidebar";
 import { AppDispatch, RootState } from "./store";
 import { getStarWarsCharactors } from "./store/slices/SWCharactorsSlice";
 import { getRandomId } from "./utils/utilitues";
 
-const ContentWrapper = styled.div`
-    padding-top: 60px;
+// const ContentWrapper = styled.div`
+//     padding-top: 60px;
+    
 
-    h1 {
-        text-align: center;
-        color: #ffd700;
-    }
-`;
+//     h1 {
+//         text-align: center;
+//         color: #ffd700;
+//     }
+// `;
 
 const CharactorInfoWrapper = styled.div`
     display: grid;
@@ -89,8 +92,9 @@ function App() {
         <>
             <Header />
             <Sidebar />
-            <ContentWrapper>
+            <Container>
                 <h1>Star Wars Character Gallery</h1>
+                <SearchBar />
                 <ImageGallary>
                     {swChractors.map(({ name }, index) => (
                         <Card
@@ -127,7 +131,7 @@ function App() {
                         </div>
                     </CharactorInfoWrapper>
                 </Modal>
-            </ContentWrapper>
+            </Container>
         </>
     );
 }
