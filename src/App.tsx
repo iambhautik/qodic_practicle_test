@@ -53,7 +53,14 @@ const CharactorInfoWrapper = styled.div`
             text-shadow: 0 0 10px rgba(255, 232, 31, 0.5);
         }
     }
-`;
+`
+        
+const H1 = styled.h1`
+    text-align: center;
+    color: #ffe81f;
+
+`
+
 
 function App() {
     const dispatch = useDispatch<AppDispatch>();
@@ -99,7 +106,7 @@ function App() {
             <Header />
             <Sidebar />
             <Container>
-                <h1>Star Wars Character Gallery</h1>
+                <H1>Star Wars Character Gallery</H1>
                 <ImageGallary>
                     {swChractors.map((charactor, index) => (
                         <Card
