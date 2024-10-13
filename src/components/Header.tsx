@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { AppDispatch } from "../store";
 import { toggleSidebar } from "../store/slices/themeSlice";
-import { AuthButtons } from "./AuthButtons";
 
 const HeaderWrapper = styled.header`
     background-color: #1a1a1a;
@@ -49,9 +48,9 @@ export const Header = () => {
                 ☰
             </div>
             <div className='user-info'>
-                <span className='user-name'>Welcome, User</span>
+                {/* <span className='user-name'>Welcome, User</span> */}
             </div>
-            <AuthButtons />
+            {/* <AuthButtons /> */}
         </HeaderWrapper>
     );
 };
