@@ -9,7 +9,6 @@ import { ImageGallary } from "./components/ImageGallary";
 import { Loader } from "./components/Loader";
 import Modal from "./components/Modal";
 import { Pagination } from "./components/Pagination";
-import { SearchBar } from "./components/SearchBar";
 import { Sidebar } from "./components/Sidebar";
 import { AppDispatch, RootState } from "./store";
 import {
@@ -101,7 +100,6 @@ function App() {
             <Sidebar />
             <Container>
                 <h1>Star Wars Character Gallery</h1>
-                <SearchBar />
                 <ImageGallary>
                     {swChractors.map((charactor, index) => (
                         <Card
