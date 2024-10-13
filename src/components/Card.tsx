@@ -41,6 +41,7 @@ const CharactorInfo = ({ CharName }: { CharName: string }) => {
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
     CharName: string;
     imageId: number;
+    onClick: () => void;
 }
 
 const Card = (props: CardProps) => {

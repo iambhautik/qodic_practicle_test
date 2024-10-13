@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -10,12 +11,16 @@ import { Pagination } from "./components/Pagination";
 import { SearchBar } from "./components/SearchBar";
 import { Sidebar } from "./components/Sidebar";
 import { AppDispatch, RootState } from "./store";
-import { getStarWarsCharactors } from "./store/slices/SWCharactorsSlice";
+import {
+    getCharHomeWorldDetails,
+    getStarWarsCharactors,
+    resetCharactorHomeWord,
+    setCharDetails,
+} from "./store/slices/SWCharactorsSlice";
 import { getRandomId } from "./utils/utilitues";
 
 // const ContentWrapper = styled.div`
 //     padding-top: 60px;
-    
 
 //     h1 {
 //         text-align: center;
@@ -62,9 +67,10 @@ const CharactorInfoWrapper = styled.div`
 function App() {
     const dispatch = useDispatch<AppDispatch>();
 
-    const { swChractors, totalPages } = useSelector(
-        (state: RootState) => state.swSlice,
-    );
+    const { swChractors, totalPages, charactorHomeWord, charDetails } =
+        useSelector((state: RootState) => state.swSlice);
+
+    console.log(charDetails, "charDetails charDetails");
 
     const [page, setPage] = useState<number>(1);
     const [modalStatus, setModalStatus] = useState<boolean>(false);
@@ -74,6 +80,12 @@ function App() {
     }, [page]);
 
     const handleClick = useCallback(() => setModalStatus((prev) => !prev), []);
+
+    const handleModalClick = (url: string) => {
+        dispatch(getCharHomeWorldDetails({ url })).then(() => {
+            handleClick();
+        });
+    };
 
     const randomIds = useMemo(() => {
         let ids: number[] = [];
@@ -96,12 +108,15 @@ function App() {
                 <h1>Star Wars Character Gallery</h1>
                 <SearchBar />
                 <ImageGallary>
-                    {swChractors.map(({ name }, index) => (
+                    {swChractors.map((charactor, index) => (
                         <Card
-                            key={name}
-                            CharName={name}
+                            key={charactor.name}
+                            CharName={charactor.name}
                             imageId={randomIds[index]}
-                            onClick={handleClick}
+                            onClick={() => {
+                                dispatch(setCharDetails(charactor));
+                                handleModalClick(charactor.homeworld);
+                            }}
                         />
                     ))}
                 </ImageGallary>
@@ -114,20 +129,54 @@ function App() {
                 />
                 <Modal
                     open={modalStatus}
-                    onClose={handleClick}
+                    onClose={() => {
+                        dispatch(resetCharactorHomeWord());
+                        handleClick();
+                    }}
                 >
                     <CharactorInfoWrapper>
                         <div className='info-item'>
                             <span className='info-label'>Height:</span>
-                            <span>1.72 meters</span>
+                            <span>
+                                {Number(charDetails.height) / 100} meters
+                            </span>
+                        </div>
+                        <div className='info-item'>
+                            <span className='info-label'>Mass:</span>
+                            <span>{charDetails.mass}</span>
+                        </div>
+                        <div className='info-item'>
+                            <span className='info-label'>Date Added: :</span>
+                            <span>{moment(charDetails.created).format("DD-MM-yyyy")}</span>
+                        </div>
+                        <div className='info-item'>
+                            <span className='info-label'>Films:</span>
+                            <span>{charDetails.films.length}</span>
+                        </div>
+                        <div className='info-item'>
+                            <span className='info-label'>Birth Year:</span>
+                            <span>{charDetails.birth_year}</span>
                         </div>
 
                         <div className='homeworld'>
                             <h3>Homeworld</h3>
                             <div className='info-item'>
                                 <span className='info-label'>Name:</span>
-                                <span>Tatooine</span>
+                                <span className="text-capitalize" >{charactorHomeWord.name}</span>
                             </div>
+                            <div className='info-item'>
+                                <span className='info-label'>Terrain:</span>
+                                <span className="text-capitalize" >{charactorHomeWord.terrain}</span>
+                            </div>
+                            <div className='info-item'>
+                                <span className='info-label'>Climate:</span>
+                                <span className="text-capitalize" >{charactorHomeWord.climate}</span>
+                            </div>
+                            <div className='info-item'>
+                                <span className='info-label'>Population:</span>
+                                <span>{charactorHomeWord.population}</span>
+                            </div>
+
                         </div>
                     </CharactorInfoWrapper>
                 </Modal>

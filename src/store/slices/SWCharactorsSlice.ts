@@ -1,10 +1,42 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "../../utils/apiUtilities";
 
+interface CharactorDetails {
+    height: string;
+    mass: string;
+    created: string;
+    films: [];
+    birth_year: string;
+}
+
+interface CharactorHomeWorld {
+    name: string;
+    terrain: string;
+    climate: string;
+    population: string;
+}
+
 interface SWCharactorsInterface {
     swChractors: any[];
     isLoadingCharactors: boolean;
     totalPages: number;
+    charactorHomeWord: CharactorHomeWorld;
+    charDetails: CharactorDetails;
+}
+
+const charDetails: CharactorDetails = {
+    created: "",
+    birth_year: "",
+    films: [],
+    height: "",
+    mass: "",
+}
+
+const charactorHomeWord: CharactorHomeWorld = {
+    name: "",
+    terrain: "",
+    climate: "",
+    population: "",
 }
 
 const initialState: SWCharactorsInterface = {
@@ -12,6 +44,8 @@ const initialState: SWCharactorsInterface = {
 
     isLoadingCharactors: false,
     totalPages: 0,
+    charactorHomeWord,
+    charDetails
 };
 
 export const getStarWarsCharactors = createAsyncThunk(
@@ -38,10 +72,39 @@ export const getStarWarsCharactors = createAsyncThunk(
     },
 );
 
-export const todosSlice = createSlice({
+export const getCharHomeWorldDetails = createAsyncThunk(
+    "SWCharactors/getCharHomeWorldDetails",
+    async ({ url }: { url: string }, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { status, data } = await axiosClient.get(url);
+
+            if (status === 200) {
+                return fulfillWithValue(data);
+            }
+
+            // if (error) return rejectWithValue(error)
+
+            throw new Error("Error happed");
+        } catch (error) {
+            return rejectWithValue({ message: "Error occcure" });
+        }
+    },
+);
+
+export const swCharSlice = createSlice({
     name: "SWCharactors",
     initialState,
-    reducers: {},
+    reducers: {
+        resetCharactorHomeWord: (state) => {
+            state.charactorHomeWord = charactorHomeWord;
+        },
+        setCharDetails: (state, action) => {
+            state.charDetails = action.payload;
+        },
+        resetCharDetails: (state) => {
+            state.charDetails = charDetails
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getStarWarsCharactors.fulfilled, (state, action) => {
@@ -56,8 +119,20 @@ export const todosSlice = createSlice({
             })
             .addCase(getStarWarsCharactors.pending, (state) => {
                 state.isLoadingCharactors = true;
+            })
+            .addCase(getCharHomeWorldDetails.fulfilled, (state, action) => {
+                state.charactorHomeWord = action.payload;
+            })
+            .addCase(getCharHomeWorldDetails.rejected, (state, action) => {
+                state.isLoadingCharactors = false;
+            })
+            .addCase(getCharHomeWorldDetails.pending, (state) => {
+                state.isLoadingCharactors = true;
             });
     },
 });
 
-export default todosSlice.reducer;
+export const { resetCharactorHomeWord, setCharDetails, resetCharDetails } =
+    swCharSlice.actions;
+
+export default swCharSlice.reducer;
