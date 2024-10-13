@@ -57,18 +57,18 @@ const ModalWrapper = styled.div<{ open: boolean }>`
 `;
 
 interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
+    title?: string;
     children: React.ReactNode;
     open: boolean;
     onClose: () => void;
 }
 
 const Modal = (props: ModalProps) => {
-
     return (
         <ModalWrapper open={props.open}>
             <div className='modal-content'>
                 <div className='modal-header'>
-                    <h2 className='modal-title'>Luke Skywalker</h2>
+                    <h2 className='modal-title'>{props.title}</h2>
                     <span
                         className='modal-close'
                         onClick={() => props.onClose()}

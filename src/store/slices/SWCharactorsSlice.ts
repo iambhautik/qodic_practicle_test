@@ -7,6 +7,7 @@ interface CharactorDetails {
     created: string;
     films: [];
     birth_year: string;
+    name: string;
 }
 
 interface CharactorHomeWorld {
@@ -30,14 +31,15 @@ const charDetails: CharactorDetails = {
     films: [],
     height: "",
     mass: "",
-}
+    name: "",
+};
 
 const charactorHomeWord: CharactorHomeWorld = {
     name: "",
     terrain: "",
     climate: "",
     population: "",
-}
+};
 
 const initialState: SWCharactorsInterface = {
     swChractors: [],
@@ -45,7 +47,7 @@ const initialState: SWCharactorsInterface = {
     isLoadingCharactors: false,
     totalPages: 0,
     charactorHomeWord,
-    charDetails
+    charDetails,
 };
 
 export const getStarWarsCharactors = createAsyncThunk(
@@ -102,7 +104,7 @@ export const swCharSlice = createSlice({
             state.charDetails = action.payload;
         },
         resetCharDetails: (state) => {
-            state.charDetails = charDetails
+            state.charDetails = charDetails;
         },
     },
     extraReducers: (builder) => {
@@ -122,6 +124,7 @@ export const swCharSlice = createSlice({
             })
             .addCase(getCharHomeWorldDetails.fulfilled, (state, action) => {
                 state.charactorHomeWord = action.payload;
+                state.isLoadingCharactors = false;
             })
             .addCase(getCharHomeWorldDetails.rejected, (state, action) => {
                 state.isLoadingCharactors = false;

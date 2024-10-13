@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 const SearchBarWrapper = styled.div`
     max-width: 300px;
@@ -13,17 +13,21 @@ const SearchBarWrapper = styled.div`
         transition: border-color 0.3s;
     }
     .search-input:focus {
-        border-color: #4CAF50;
+        border-color: #4caf50;
     }
     .search-input::placeholder {
         color: #999;
     }
-`
+`;
 
 export const SearchBar = () => {
     return (
         <SearchBarWrapper>
-            <input type="text" className="search-input" placeholder="Search..." />
+            <input
+                type='text'
+                className='search-input'
+                placeholder='Search...'
+            />
         </SearchBarWrapper>
-    )
-}
+    );
+};

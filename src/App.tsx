@@ -6,6 +6,7 @@ import Card from "./components/Card";
 import { Container } from "./components/ContentWrapper";
 import { Header } from "./components/Header";
 import { ImageGallary } from "./components/ImageGallary";
+import { Loader } from "./components/Loader";
 import Modal from "./components/Modal";
 import { Pagination } from "./components/Pagination";
 import { SearchBar } from "./components/SearchBar";
@@ -18,15 +19,6 @@ import {
     setCharDetails,
 } from "./store/slices/SWCharactorsSlice";
 import { getRandomId } from "./utils/utilitues";
-
-// const ContentWrapper = styled.div`
-//     padding-top: 60px;
-
-//     h1 {
-//         text-align: center;
-//         color: #ffd700;
-//     }
-// `;
 
 const CharactorInfoWrapper = styled.div`
     display: grid;
@@ -67,10 +59,13 @@ const CharactorInfoWrapper = styled.div`
 function App() {
     const dispatch = useDispatch<AppDispatch>();
 
-    const { swChractors, totalPages, charactorHomeWord, charDetails } =
-        useSelector((state: RootState) => state.swSlice);
-
-    console.log(charDetails, "charDetails charDetails");
+    const {
+        swChractors,
+        isLoadingCharactors,
+        totalPages,
+        charactorHomeWord,
+        charDetails,
+    } = useSelector((state: RootState) => state.swSlice);
 
     const [page, setPage] = useState<number>(1);
     const [modalStatus, setModalStatus] = useState<boolean>(false);
@@ -128,6 +123,7 @@ function App() {
                     onPageChange={setPage}
                 />
                 <Modal
+                    title={charDetails.name}
                     open={modalStatus}
                     onClose={() => {
                         dispatch(resetCharactorHomeWord());
@@ -147,7 +143,11 @@ function App() {
                         </div>
                         <div className='info-item'>
                             <span className='info-label'>Date Added: :</span>
-                            <span>{moment(charDetails.created).format("DD-MM-yyyy")}</span>
+                            <span>
+                                {moment(charDetails.created).format(
+                                    "DD-MM-yyyy",
+                                )}
+                            </span>
                         </div>
                         <div className='info-item'>
                             <span className='info-label'>Films:</span>
@@ -162,24 +162,31 @@ function App() {
                             <h3>Homeworld</h3>
                             <div className='info-item'>
                                 <span className='info-label'>Name:</span>
-                                <span className="text-capitalize" >{charactorHomeWord.name}</span>
+                                <span className='text-capitalize'>
+                                    {charactorHomeWord.name}
+                                </span>
                             </div>
                             <div className='info-item'>
                                 <span className='info-label'>Terrain:</span>
-                                <span className="text-capitalize" >{charactorHomeWord.terrain}</span>
+                                <span className='text-capitalize'>
+                                    {charactorHomeWord.terrain}
+                                </span>
                             </div>
                             <div className='info-item'>
                                 <span className='info-label'>Climate:</span>
-                                <span className="text-capitalize" >{charactorHomeWord.climate}</span>
+                                <span className='text-capitalize'>
+                                    {charactorHomeWord.climate}
+                                </span>
                             </div>
                             <div className='info-item'>
                                 <span className='info-label'>Population:</span>
                                 <span>{charactorHomeWord.population}</span>
                             </div>
-
                         </div>
                     </CharactorInfoWrapper>
                 </Modal>
+
+                {isLoadingCharactors && <Loader />}
             </Container>
         </>
     );
