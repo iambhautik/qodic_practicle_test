@@ -45,14 +45,14 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Card = (props: CardProps) => {
-    const { ...restProps } = props;
+    const { CharName, imageId, ...restProps } = props;
     return (
         <CardWrapper {...restProps}>
             <CharactorImage
-                src={`https://picsum.photos/id/${props.imageId}/200/300`}
+                src={`https://picsum.photos/id/${imageId}/200/300`}
                 alt='Luke Skywalker'
             />
-            <CharactorInfo CharName={props.CharName} />
+            <CharactorInfo CharName={CharName} />
         </CardWrapper>
     );
 };
